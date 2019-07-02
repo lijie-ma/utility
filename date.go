@@ -15,8 +15,12 @@ const (
 )
 
 //当前时间
-func Date() string {
-	return LocalTime().Format(YYYY_MM_DD)
+func Date(style ...string) string {
+	defaultStyle := YYYY_MM_DD
+	if 0 < len(style) {
+		defaultStyle = style[0]
+	}
+	return LocalTime().Format(defaultStyle)
 }
 
 func DateTime() string {
@@ -60,13 +64,18 @@ func LastTime(style string, agoSeconds ...int) string {
 	return lastDay.Format(style)
 }
 
-func LastDateFromDay(date string, agoHours int) (string, error) {
-	return addTime(date, YYYY_MM_DD, agoHours*3600)
+func FutureDateFromDay(date string, hours int) (string, error) {
+	if hours < 0 {
+		return addTime(date, YYYY_MM_DD, hours*3600)
+	}
+	return addTime(date, YYYY_MM_DD, hours*3600, true)
 }
 
-// LastDateTimeFromDay 给定时间之前的时间
-func LastDateTimeFromDay(dateTime string, agoSeconds int) (string, error) {
-	return addTime(dateTime, YYYY_MM_DD_H_I_S, agoSeconds)
+func FutureDateTimeFromDay(date string, seconds int) (string, error) {
+	if seconds < 0 {
+		return addTime(date, YYYY_MM_DD_H_I_S, seconds)
+	}
+	return addTime(date, YYYY_MM_DD_H_I_S, seconds, true)
 }
 
 //计算时间差
@@ -84,14 +93,6 @@ func addTime(times string, timeStyle string, seconds int, isFuture ...bool) (str
 	d, _ := time.ParseDuration(fmt.Sprintf(style, seconds))
 	l := t.Add(d)
 	return l.Format(timeStyle), nil
-}
-
-func FutureDateFromDay(date string, hours int) (string, error) {
-	return addTime(date, YYYY_MM_DD, hours*3600, true)
-}
-
-func FutureDateTimeFromDay(date string, seconds int) (string, error) {
-	return addTime(date, YYYY_MM_DD_H_I_S, seconds, true)
 }
 
 //返回时区为 Asia/Chongqing 的unix 时间戳
@@ -118,7 +119,6 @@ type NullTime struct {
 
 func Str2Date(value string) NullTime {
 	t, e := time.ParseInLocation(YYYY_MM_DD, value, getLocation())
-
 	if nil != e {
 		return NullTime{Valid: false}
 	}
