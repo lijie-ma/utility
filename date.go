@@ -39,17 +39,6 @@ func LocalTime() time.Time {
 	return time.Now().In(getLocation())
 }
 
-//前一天
-func LastDate(style string) string {
-	if 0 == len(style) {
-		style = YYYY_MM_DD
-	}
-	now := LocalTime()
-	m, _ := time.ParseDuration("-24h")
-	lastDay := now.Add(m)
-	return lastDay.Format(style)
-}
-
 //过往时间， 默认取 5分钟前的时间
 func LastTime(style string, agoSeconds ...int) string {
 	if 0 == len(style) {
@@ -57,7 +46,7 @@ func LastTime(style string, agoSeconds ...int) string {
 	}
 	s := -5 * 60
 	if 0 < len(agoSeconds) {
-		s = -agoSeconds[0]
+		s = 0 - agoSeconds[0]
 	}
 	now := LocalTime()
 	lastDay := now.Add(time.Duration(s) * time.Second)
@@ -65,38 +54,34 @@ func LastTime(style string, agoSeconds ...int) string {
 }
 
 func FutureDateFromDay(date string, hours int) (string, error) {
-	if hours < 0 {
-		return addTime(date, YYYY_MM_DD, hours*3600)
-	}
-	return addTime(date, YYYY_MM_DD, hours*3600, true)
+	return addTime(date, YYYY_MM_DD, hours*3600)
 }
 
 func FutureDateTimeFromDay(date string, seconds int) (string, error) {
-	if seconds < 0 {
-		return addTime(date, YYYY_MM_DD_H_I_S, seconds)
-	}
-	return addTime(date, YYYY_MM_DD_H_I_S, seconds, true)
+	return addTime(date, YYYY_MM_DD_H_I_S, seconds)
 }
 
 //计算时间差
 // seconds 是相隔时间的秒数
 // isFuture 标记是将来的时间，还是过去的时间， 默认过去的时间
-func addTime(times string, timeStyle string, seconds int, isFuture ...bool) (string, error) {
+func addTime(times string, timeStyle string, seconds int) (string, error) {
 	t, err := time.ParseInLocation(timeStyle, times, getLocation())
 	if nil != err {
 		return "", err
 	}
-	style := `-%ds`
-	if 0 < len(isFuture) && isFuture[0] {
-		style = `%ds`
-	}
-	d, _ := time.ParseDuration(fmt.Sprintf(style, seconds))
-	l := t.Add(d)
+	l := t.Add(time.Duration(seconds) * time.Second)
 	return l.Format(timeStyle), nil
 }
 
 //返回时区为 Asia/Chongqing 的unix 时间戳
-func Date2Unix(date string, style string) int64 {
+func Date2Unix(date string) int64 {
+	style := YYYY_MM_DD_H_I_S
+	switch len(date) {
+	case 8:
+		style = YYYYMMDD
+	case 10:
+		style = YYYY_MM_DD
+	}
 	t, err := time.ParseInLocation(style, date, getLocation())
 	if nil != err {
 		return 0
