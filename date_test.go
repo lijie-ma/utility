@@ -6,10 +6,11 @@ import "testing"
 func TestDate(t *testing.T) {
 	d := Date()
 	t.Log(d)
+	t.Log(Date(YYYY_MM_DD_H_I_S))
 }
 
 func TestDate2Unix(t *testing.T) {
-	d := Date2Unix(DateTime())
+	d := Date2Unix(Date(YYYY_MM_DD_H_I_S))
 	t.Log( d)
 	t.Log(Unix2Time(d))
 }

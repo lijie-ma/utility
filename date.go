@@ -14,6 +14,24 @@ const (
 	TIME_LOCAL       = `Asia/Chongqing`
 )
 
+var timeZone string
+
+func init() {
+	timeZone = TIME_LOCAL
+}
+
+func SetTimeZone(zone string) {
+	timeZone = zone
+}
+
+func getLocation() *time.Location {
+	l, err := time.LoadLocation(timeZone)
+	if nil != err {
+		panic(err)
+	}
+	return l
+}
+
 //当前时间
 func Date(style ...string) string {
 	defaultStyle := YYYY_MM_DD
@@ -21,18 +39,6 @@ func Date(style ...string) string {
 		defaultStyle = style[0]
 	}
 	return LocalTime().Format(defaultStyle)
-}
-
-func DateTime() string {
-	return LocalTime().Format(YYYY_MM_DD_H_I_S)
-}
-
-func getLocation() *time.Location {
-	l, err := time.LoadLocation(TIME_LOCAL)
-	if nil != err {
-		l = time.FixedZone("CST", 8*3600)
-	}
-	return l
 }
 
 func LocalTime() time.Time {
