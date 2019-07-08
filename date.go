@@ -11,13 +11,13 @@ const (
 	YYYY_MM_DD       = `2006-01-02`
 	YYYYMMDD         = `20060102`
 	YYYY_MM_DD_H_I_S = `2006-01-02 15:04:05`
-	TIME_LOCAL       = `Asia/Chongqing`
+	TIME_ZONE       = `Asia/Chongqing`
 )
 
 var timeZone string
 
 func init() {
-	timeZone = TIME_LOCAL
+	timeZone = TIME_ZONE
 }
 
 func SetTimeZone(zone string) {
