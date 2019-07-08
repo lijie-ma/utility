@@ -20,4 +20,15 @@ unix := utility.Date2Unix(today)
 // 每月的最后一天
 days := utility.MonthLastDay(today)
 
+switch Compare("2019-07-01", "2019-07-01") {
+    case 0:
+        fmt.Println("eq")
+    case -1:
+        fmt.Println("lt")
+    case 1:
+        fmt.Println("gt")
+    case -2:
+        fmt.Println("error")
+}
+
 ```

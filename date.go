@@ -150,3 +150,29 @@ func GetDays(year int, month int) (days int) {
 	}
 	return
 }
+
+// 日期比较
+// 相等返回 0， 小于 -1 大于 1
+// -2 代表异常
+func Compare(t1, t2 string, style ...string) int {
+	s := YYYY_MM_DD
+	if 0 < len(style) {
+		s = style[0]
+	}
+	tt1, er := time.Parse(s, t1)
+	if nil != er {
+		return -2
+	}
+	tt2, err := time.Parse(s, t2)
+	if nil != err {
+		return -2
+	}
+	if tt1.Equal(tt2) {
+		return 0
+	}
+
+	if tt1.Before(tt2) {
+		return -1
+	}
+	return 1
+}
