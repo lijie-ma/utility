@@ -37,19 +37,20 @@ func main() {
 
 	//数组操作
 	s := []string{"a", "b", "c", "d", "e"}
-	ArrayPop(&s)
+	SlicePop(&s)
 	fmt.Println(s) // [a c d e]
 }
 
 
 ```
 
-### Array(Slice/Map) Functions
+### Slice(Slice/Map) Functions
 
 ```function
-InArray()
-ArrayUnique()
-ArrayFilter()
-ArrayPop()
-
+InSlice()
+SliceUnique()
+SliceFilter()
+SlicePop()
+SliceIntersect()
+SliceDiff()
 ```
