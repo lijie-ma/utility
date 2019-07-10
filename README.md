@@ -34,6 +34,11 @@ func main() {
 	case -2:
 		fmt.Println("error")
 	}
+
+	//数组操作
+	s := []string{"a", "b", "c", "d", "e"}
+	ArrayPop(&s)
+	fmt.Println(s) // [a c d e]
 }
 
 
@@ -42,8 +47,9 @@ func main() {
 ### Array(Slice/Map) Functions
 
 ```function
-    InArray()
-    ArrayUnique()
-    ArrayFilter()
+InArray()
+ArrayUnique()
+ArrayFilter()
+ArrayPop()
 
 ```

@@ -52,3 +52,14 @@ func ArrayFilter(array interface{}, filter func(value interface{}) bool) interfa
 	}
 	return newSlice
 }
+
+func ArrayPop(arrayPoint interface{}) interface{} {
+	tmpType := reflect.TypeOf(arrayPoint)
+	if tmpType.Kind() != reflect.Ptr {
+		panic("需要传递数组指针")
+	}
+	v := reflect.ValueOf(arrayPoint)
+	elem := v.Elem()
+	elem.Set(reflect.AppendSlice(elem.Slice(0, elem.Len()-1), elem.Slice(0, 0)))
+	return elem
+}

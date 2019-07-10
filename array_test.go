@@ -16,3 +16,9 @@ func TestArrayFilter(t *testing.T) {
 	i := []int{1, 2, 3, 4, 5, 6, 7}
 	t.Log(ArrayFilter(i, filterI))
 }
+
+func TestArrayPop(t *testing.T) {
+	s := []string{"a", "b", "c", "d", "e"}
+	ArrayPop(&s)
+	t.Log(s)
+}
