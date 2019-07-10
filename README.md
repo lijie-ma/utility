@@ -38,3 +38,12 @@ func main() {
 
 
 ```
+
+### Array(Slice/Map) Functions
+
+```function
+    InArray()
+    ArrayUnique()
+    ArrayFilter()
+
+```
