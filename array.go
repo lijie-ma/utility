@@ -60,6 +60,9 @@ func ArrayPop(arrayPoint interface{}) interface{} {
 	}
 	v := reflect.ValueOf(arrayPoint)
 	elem := v.Elem()
+	if elem.Kind() != reflect.Slice {
+		panic("需要传递数组指针")
+	}
 	elem.Set(reflect.AppendSlice(elem.Slice(0, elem.Len()-1), elem.Slice(0, 0)))
 	return elem
 }
