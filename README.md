@@ -9,6 +9,10 @@ go get -u github.com/lijie-ma/utility
 ## demo
 
 ```golang
+# 默认时区 Asia/Chongqing ，可以通过下面函数修改
+SetTimeZone("UTC") 
+
+
 #当前日期
 today := utility.Date() // 2019-07-02
 
