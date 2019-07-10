@@ -50,10 +50,10 @@ func SliceFilter(array interface{}, filter func(value interface{}) bool) interfa
 			newSlice = reflect.Append(newSlice, s.Index(i))
 		}
 	}
-	return newSlice
+	return newSlice.Interface()
 }
 
-func SlicePop(arrayPoint interface{}) interface{} {
+func SlicePop(arrayPoint interface{}) {
 	tmpType := reflect.TypeOf(arrayPoint)
 	if tmpType.Kind() != reflect.Ptr {
 		panic("需要传递数组指针")
@@ -64,7 +64,6 @@ func SlicePop(arrayPoint interface{}) interface{} {
 		panic("需要传递数组指针")
 	}
 	elem.Set(reflect.AppendSlice(elem.Slice(0, elem.Len()-1), elem.Slice(0, 0)))
-	return elem
 }
 
 // SliceIntersect 数组交集
@@ -93,7 +92,7 @@ func SliceIntersect(a1, a2 interface{}) interface{} {
 			newSlice = reflect.Append(newSlice, v2.Index(i))
 		}
 	}
-	return newSlice
+	return newSlice.Interface()
 }
 
 func SliceDiff(a1, a2 interface{}) interface{} {
@@ -121,5 +120,5 @@ func SliceDiff(a1, a2 interface{}) interface{} {
 			newSlice = reflect.Append(newSlice, v1.Index(i))
 		}
 	}
-	return newSlice
+	return newSlice.Interface()
 }
