@@ -11,7 +11,7 @@ const (
 	YYYY_MM_DD       = `2006-01-02`
 	YYYYMMDD         = `20060102`
 	YYYY_MM_DD_H_I_S = `2006-01-02 15:04:05`
-	TIME_ZONE       = `Asia/Chongqing`
+	TIME_ZONE        = `Asia/Chongqing`
 )
 
 var timeZone string
@@ -32,6 +32,11 @@ func getLocation() *time.Location {
 	return l
 }
 
+// unix 时间戳
+func Time() int64 {
+	return LocalTime().Unix()
+}
+
 //当前时间
 func Date(style ...string) string {
 	defaultStyle := YYYY_MM_DD
@@ -43,6 +48,13 @@ func Date(style ...string) string {
 
 func LocalTime() time.Time {
 	return time.Now().In(getLocation())
+}
+
+// 字符串转换unix 时间戳
+// date  格式 2019-07-01 20190701 2019-07-01 12:12:12
+// 返回 0 代表失败
+func Str2Time(date string) int64 {
+	return Date2Unix(date)
 }
 
 //过往时间， 默认取 5分钟前的时间
@@ -101,27 +113,6 @@ func Unix2Time(unixTime int64, style ...string) string {
 		return t.Format(YYYY_MM_DD_H_I_S)
 	}
 	return t.Format(style[0])
-}
-
-type NullTime struct {
-	Time  time.Time
-	Valid bool // Valid is true if Time is not NULL
-}
-
-func Str2Date(value string) NullTime {
-	t, e := time.ParseInLocation(YYYY_MM_DD, value, getLocation())
-	if nil != e {
-		return NullTime{Valid: false}
-	}
-	return NullTime{t, true}
-}
-
-func Str2Time(value string) NullTime {
-	t, e := time.ParseInLocation(YYYY_MM_DD_H_I_S, value, getLocation())
-	if nil != e {
-		return NullTime{Valid: false}
-	}
-	return NullTime{t, true}
 }
 
 func atoi(arg interface{}) int {
