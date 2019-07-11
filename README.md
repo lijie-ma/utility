@@ -55,3 +55,9 @@ SliceShift()
 SliceIntersect()
 SliceDiff()
 ```
+
+### string Functions
+
+```function
+Substr
+```
