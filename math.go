@@ -1,6 +1,10 @@
 package utility
 
-import "math"
+import (
+	"math"
+	"math/rand"
+	"time"
+)
 
 // float 除法
 // point 为保留小数位数 默认3位
@@ -19,4 +23,12 @@ func DivFloat(f1, f2 float64, point ...int) float64 {
 func Round(f float64, n int) float64 {
 	pow10_n := math.Pow10(n)
 	return math.Trunc((f+0.5/pow10_n)*pow10_n) / pow10_n
+}
+
+func Rand(min, max int) int {
+	if min >= max || min == 0 || max == 0 {
+		return max
+	}
+	d := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return d.Intn(max-min) + min
 }

@@ -51,3 +51,7 @@ func AtoInt64(arg interface{}) int64 {
 	}
 	return num
 }
+
+func FloattoStr(f float64, precision int) string {
+	return strconv.FormatFloat(f, 'g', precision, 64)
+}

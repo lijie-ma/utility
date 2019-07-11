@@ -62,16 +62,23 @@ MapKeys()
 ### string Functions
 
 ```function
-Substr
+Substr()
+```
+
+### math
+```cassandraql
+DivFloat()
+Round()
 ```
 
 ### other
 
 ```cassandraql
-Ip2Long
-Long2Ip
+Ip2Long()
+Long2Ip()
 
-Atoi
-AtoInt64
-AtoFloat64
+Atoi()
+AtoInt64()
+AtoFloat64()
+FloattoStr()
 ```
