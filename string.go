@@ -1,10 +1,11 @@
 package utility
 
-func Substr(str string, start, length int) string {
-	if length == 0 {
-		return ""
+func Substr(s string, start int, length ...int) string {
+	fetchLen := len(s)
+	if len(length) > 0 {
+		fetchLen = length[0]
 	}
-	runeSlice := []rune(str)
+	runeSlice := []rune(s)
 	lenSlice := len(runeSlice)
 
 	if start < 0 {
@@ -13,12 +14,12 @@ func Substr(str string, start, length int) string {
 	if start > lenSlice {
 		start = lenSlice
 	}
-	end := start + length
+	end := start + fetchLen
 	if end > lenSlice {
 		end = lenSlice
 	}
-	if length < 0 {
-		end = lenSlice + length
+	if fetchLen < 0 {
+		end = lenSlice + fetchLen
 	}
 	if start > end {
 		start, end = end, start
