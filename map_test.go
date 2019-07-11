@@ -11,4 +11,7 @@ func TestMapKeys(t *testing.T) {
 	}
 	c, e := MapKeys(s)
 	t.Log(c.([]string), e)
+
+	cf, ee := MapKeys(s, func(key interface{}) bool { return key.(string) == "a" })
+	t.Log(cf.([]string), ee)
 }
