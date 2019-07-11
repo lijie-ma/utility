@@ -7,7 +7,7 @@ func filterS(v interface{}) bool {
 }
 
 func filterI(v interface{}) bool {
-	return v.(int) % 2 == 0
+	return v.(int)%2 == 0
 }
 
 func TestSliceFilter(t *testing.T) {
@@ -45,4 +45,30 @@ func TestSliceDiff(t *testing.T) {
 	ti := SliceDiff(s1, s2)
 	t.Log(ti.([]string))
 	t.Log(ti)
+}
+
+func TestSliceColumn(t *testing.T) {
+	s1 := []map[string]interface{}{
+		map[string]interface{}{
+			"a": 1,
+			"b": "b1",
+		},
+		map[string]interface{}{
+			"a": 2,
+			"b": "b2",
+		},
+	}
+	t1, _ := SliceColumn(s1, "a")
+	t.Log(t1.([]int))
+	s2 := []map[string]string{
+		map[string]string{
+			"a": "a1",
+			"b": "b1",
+		},
+		map[string]string{
+			"a": "a2",
+			"b": "b2",
+		},
+	}
+	t.Log(SliceColumn(s2, "b"))
 }

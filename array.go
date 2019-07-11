@@ -1,6 +1,7 @@
 package utility
 
 import (
+	"errors"
 	"reflect"
 )
 
@@ -135,4 +136,35 @@ func SliceDiff(a1, a2 interface{}) interface{} {
 		}
 	}
 	return newSlice.Interface()
+}
+
+//返回数组中指定的一列
+func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
+	t1 := reflect.TypeOf(array)
+	if t1.Kind() != reflect.Slice || t1.Elem().Kind() != reflect.Map {
+		return nil, errors.New("a1 is not a slice")
+	}
+	vArray := reflect.ValueOf(array)
+	vMap := vArray.Index(0)
+	vkey := reflect.ValueOf(columnKey)
+	tmp1 := vMap.MapIndex(vkey)
+	if !tmp1.IsValid() { //columnKey is not exists
+		return nil, errors.New(columnKey + " is not exists")
+	}
+	if tmp1.Kind() == reflect.Interface {
+		tmp1 = tmp1.Elem()
+	}
+	newSlice := reflect.MakeSlice(reflect.SliceOf(tmp1.Type()), 0, vArray.Len())
+	newSlice = reflect.Append(newSlice, tmp1)
+	for i := 1; i < vArray.Len(); i++ {
+		tmp1 := vArray.Index(i).MapIndex(vkey)
+		if !tmp1.IsValid() { //columnKey is not exists
+			return nil, errors.New(columnKey + " is not exists")
+		}
+		if tmp1.Kind() == reflect.Interface {
+			tmp1 = tmp1.Elem()
+		}
+		newSlice = reflect.Append(newSlice, tmp1)
+	}
+	return newSlice.Interface(), nil
 }

@@ -54,6 +54,7 @@ SlicePop()
 SliceShift()
 SliceIntersect()
 SliceDiff()
+SliceColumn
 ```
 
 ### string Functions
