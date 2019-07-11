@@ -64,3 +64,14 @@ MapKeys()
 ```function
 Substr
 ```
+
+### other
+
+```cassandraql
+Ip2Long
+Long2Ip
+
+Atoi
+AtoInt64
+AtoFloat64
+```

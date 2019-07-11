@@ -27,3 +27,27 @@ func Ip2Long(ip string) int64 {
 func Long2Ip(ip int64) string {
 	return fmt.Sprintf("%d.%d.%d.%d", byte(ip>>24), byte(ip>>16), byte(ip>>8), byte(ip))
 }
+
+func Atoi(arg interface{}) int {
+	num, err := strconv.Atoi(arg.(string))
+	if nil != err {
+		return 0
+	}
+	return num
+}
+
+func AtoFloat64(arg interface{}) float64 {
+	num, err := strconv.ParseFloat(arg.(string), 32)
+	if nil != err {
+		return 0.0
+	}
+	return num
+}
+
+func AtoInt64(arg interface{}) int64 {
+	num, err := strconv.ParseInt(arg.(string), 10, 64)
+	if nil != err {
+		return int64(0)
+	}
+	return num
+}
