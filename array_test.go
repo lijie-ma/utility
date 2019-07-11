@@ -25,6 +25,12 @@ func TestSlicePop(t *testing.T) {
 	t.Log(s)
 }
 
+func TestSliceShift(t *testing.T) {
+	s := []string{"a", "b", "c", "d", "e"}
+	SliceShift(&s)
+	t.Log(s, len(s), cap(s))
+}
+
 func TestSliceIntersect(t *testing.T) {
 	s1 := []string{"a", "b", "c", "d", "e"}
 	s2 := []string{"f", "b", "c", "d", "e"}

@@ -51,6 +51,7 @@ InSlice()
 SliceUnique()
 SliceFilter()
 SlicePop()
+SliceShift()
 SliceIntersect()
 SliceDiff()
 ```

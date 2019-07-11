@@ -66,6 +66,20 @@ func SlicePop(arrayPoint interface{}) {
 	elem.Set(reflect.AppendSlice(elem.Slice(0, elem.Len()-1), elem.Slice(0, 0)))
 }
 
+//将数组开头的单元移出数组
+func SliceShift(arrayPoint interface{}) {
+	tmpType := reflect.TypeOf(arrayPoint)
+	if tmpType.Kind() != reflect.Ptr {
+		panic("需要传递数组指针")
+	}
+	v := reflect.ValueOf(arrayPoint)
+	elem := v.Elem()
+	if elem.Kind() != reflect.Slice {
+		panic("需要传递数组指针")
+	}
+	elem.Set(reflect.AppendSlice(elem.Slice(1, elem.Len()-1), elem.Slice(1, 1)))
+}
+
 // SliceIntersect 数组交集
 func SliceIntersect(a1, a2 interface{}) interface{} {
 	t1 := reflect.TypeOf(a1)
