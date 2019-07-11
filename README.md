@@ -71,6 +71,14 @@ DivFloat()
 Round()
 ```
 
+### file
+```cassandraql
+FileGetContents()
+IsDir()
+FileExists()
+
+```
+
 ### other
 
 ```cassandraql

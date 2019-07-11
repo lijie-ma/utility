@@ -1,6 +1,10 @@
 package utility
 
-import "os"
+import (
+	"errors"
+	"io/ioutil"
+	"os"
+)
 
 func FileExists(file string) bool {
 	_, err := os.Stat(file)
@@ -13,4 +17,16 @@ func IsDir(path string) bool {
 		return false
 	}
 	return f.IsDir()
+}
+
+// 读取文件的全部内容并返回
+func FileGetContents(filename string) (string, error) {
+	if !FileExists(filename) {
+		return "", errors.New("file not found")
+	}
+	content, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+	return string(content), nil
 }
