@@ -142,7 +142,7 @@ func SliceDiff(a1, a2 interface{}) interface{} {
 func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
 	t1 := reflect.TypeOf(array)
 	if t1.Kind() != reflect.Slice || t1.Elem().Kind() != reflect.Map {
-		return nil, errors.New("a1 is not a slice")
+		return nil, errors.New("array is not a slice")
 	}
 	vArray := reflect.ValueOf(array)
 	vMap := vArray.Index(0)
@@ -167,4 +167,47 @@ func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
 		newSlice = reflect.Append(newSlice, tmp1)
 	}
 	return newSlice.Interface(), nil
+}
+
+// 计算数组中所有值的和
+// 目前支持 int16，int32， int64， float32，float64
+func SliceSum(array interface{}) interface{} {
+	t1 := reflect.TypeOf(array)
+	if t1.Kind() != reflect.Slice {
+		return reflect.New(t1).Interface()
+	}
+	v1 := reflect.ValueOf(array)
+	switch v1.Type().Elem().Kind() {
+	case reflect.Int16, reflect.Int, reflect.Int32, reflect.Int64:
+		vSum := reflect.New(reflect.TypeOf(int64(0)))
+		for i := 0; i < v1.Len(); i++ {
+			vSum.Elem().Set(reflect.ValueOf(vSum.Elem().Int() + v1.Index(i).Int()))
+		}
+		return sliceSum(vSum, v1.Type().Elem().Kind())
+	case reflect.Float32, reflect.Float64:
+		vSum := reflect.New(reflect.TypeOf(float64(0)))
+		for i := 0; i < v1.Len(); i++ {
+			vSum.Elem().Set(reflect.ValueOf(vSum.Elem().Float() + v1.Float()))
+		}
+		return sliceSum(vSum, v1.Type().Elem().Kind())
+	}
+	return reflect.New(t1).Interface()
+}
+
+func sliceSum(vSum reflect.Value, kind reflect.Kind) interface{} {
+	switch kind {
+	case reflect.Int16:
+		return int16(vSum.Elem().Int())
+	case reflect.Int32:
+		return int32(vSum.Elem().Int())
+	case reflect.Int:
+		return int(vSum.Elem().Int())
+	case reflect.Int64:
+		vSum.Elem().Int()
+	case reflect.Float32:
+		return float32(vSum.Elem().Float())
+	case reflect.Float64:
+		vSum.Elem().Float()
+	}
+	return vSum.Elem().Interface()
 }
