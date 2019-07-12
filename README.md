@@ -44,6 +44,19 @@ func main() {
 
 ```
 
+### time
+```cassandraql
+Time()
+Date()
+FutureDateFromDay()
+Date2Unix()
+Unix2Time()
+MonthLastDay()
+Compare()
+
+```
+
+
 ### Slice(Slice/Map) Functions
 
 ```function
