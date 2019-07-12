@@ -65,6 +65,7 @@ MapKeys()
 
 ```function
 Substr()
+
 ```
 
 ### math
@@ -92,4 +93,7 @@ Atoi()
 AtoInt64()
 AtoFloat64()
 FloattoStr()
+Base64Encode()
+Base64Decode()
+Md5()
 ```
