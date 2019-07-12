@@ -56,6 +56,7 @@ SliceIntersect()
 SliceDiff()
 SliceColumn()
 SliceSum()
+SliceProduct()
 
 MapKeys()
 ```

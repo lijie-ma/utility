@@ -169,45 +169,60 @@ func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
 	return newSlice.Interface(), nil
 }
 
+//计算数组中所有值的乘积
+//目前支持 int16，int32， int64， float32，float64
+// 返回值类型 为 int64 或float64
+func SliceProduct(array interface{}) interface{} {
+	figure := func(v1, v2 reflect.Value, kind reflect.Kind) interface{} {
+		switch kind {
+		case reflect.Int64:
+			return v1.Int() * v2.Int()
+		case reflect.Float64:
+			return v1.Float() * v2.Float()
+		}
+		return v1.Interface()
+	}
+	return sliceFigure(array, 1, figure)
+}
+
 // 计算数组中所有值的和
 // 目前支持 int16，int32， int64， float32，float64
+// 返回值类型 为 int64 或float64
 func SliceSum(array interface{}) interface{} {
+	figure := func(v1, v2 reflect.Value, kind reflect.Kind) interface{} {
+		switch kind {
+		case reflect.Int64:
+			return v1.Int() + v2.Int()
+		case reflect.Float64:
+			return v1.Float() + v2.Float()
+		}
+		return v1.Interface()
+	}
+	return sliceFigure(array, 0, figure)
+}
+
+func sliceFigure(array interface{}, initValue int, figure func(v1, v2 reflect.Value, kind reflect.Kind) interface{}) interface{} {
 	t1 := reflect.TypeOf(array)
 	if t1.Kind() != reflect.Slice {
 		return reflect.New(t1).Interface()
 	}
 	v1 := reflect.ValueOf(array)
 	switch v1.Type().Elem().Kind() {
-	case reflect.Int16, reflect.Int, reflect.Int32, reflect.Int64:
-		vSum := reflect.New(reflect.TypeOf(int64(0)))
+	case reflect.Int16, reflect.Int, reflect.Int32, reflect.Int64,
+		reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		vSum := reflect.New(reflect.TypeOf(int64(initValue))).Elem()
+		vSum.Set(reflect.ValueOf(int64(initValue)))
 		for i := 0; i < v1.Len(); i++ {
-			vSum.Elem().Set(reflect.ValueOf(vSum.Elem().Int() + v1.Index(i).Int()))
+			vSum.Set(reflect.ValueOf(figure(vSum, v1.Index(i), reflect.Int64).(int64)))
 		}
-		return sliceSum(vSum, v1.Type().Elem().Kind())
+		return vSum.Int()
 	case reflect.Float32, reflect.Float64:
-		vSum := reflect.New(reflect.TypeOf(float64(0)))
+		vSum := reflect.New(reflect.TypeOf(float64(initValue))).Elem()
+		vSum.Set(reflect.ValueOf(float64(initValue)))
 		for i := 0; i < v1.Len(); i++ {
-			vSum.Elem().Set(reflect.ValueOf(vSum.Elem().Float() + v1.Float()))
+			vSum.Set(reflect.ValueOf(figure(vSum, v1.Index(i), reflect.Float64).(float64)))
 		}
-		return sliceSum(vSum, v1.Type().Elem().Kind())
+		return vSum.Float()
 	}
 	return reflect.New(t1).Interface()
-}
-
-func sliceSum(vSum reflect.Value, kind reflect.Kind) interface{} {
-	switch kind {
-	case reflect.Int16:
-		return int16(vSum.Elem().Int())
-	case reflect.Int32:
-		return int32(vSum.Elem().Int())
-	case reflect.Int:
-		return int(vSum.Elem().Int())
-	case reflect.Int64:
-		vSum.Elem().Int()
-	case reflect.Float32:
-		return float32(vSum.Elem().Float())
-	case reflect.Float64:
-		vSum.Elem().Float()
-	}
-	return vSum.Elem().Interface()
 }
