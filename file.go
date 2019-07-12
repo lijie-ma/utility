@@ -30,3 +30,8 @@ func FileGetContents(filename string) (string, error) {
 	}
 	return string(content), nil
 }
+
+// 读取文件的全部内容并返回
+func FilePutContents(filename string, data string) error {
+	return ioutil.WriteFile(filename, []byte(data), 0666)
+}

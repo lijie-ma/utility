@@ -74,6 +74,7 @@ Round()
 ### file
 ```cassandraql
 FileGetContents()
+FilePutContents()
 IsDir()
 FileExists()
 
