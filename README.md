@@ -1,5 +1,5 @@
 # utility
-常用函数工具包
+go版本的php函数 非大而全，只做常用的和扩展的
 
 ## 安装
 ```
@@ -70,6 +70,7 @@ SliceDiff()
 SliceColumn()
 SliceSum()
 SliceProduct()
+SliceChunk()
 
 MapKeys()
 ```

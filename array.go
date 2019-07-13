@@ -2,6 +2,7 @@ package utility
 
 import (
 	"errors"
+	"math"
 	"reflect"
 )
 
@@ -78,7 +79,7 @@ func SliceShift(arrayPoint interface{}) {
 	if elem.Kind() != reflect.Slice {
 		panic("需要传递数组指针")
 	}
-	elem.Set(reflect.AppendSlice(elem.Slice(1, elem.Len()-1), elem.Slice(1, 1)))
+	elem.Set(reflect.AppendSlice(elem.Slice(1, elem.Len()), elem.Slice(1, 1)))
 }
 
 // SliceIntersect 数组交集
@@ -225,4 +226,29 @@ func sliceFigure(array interface{}, initValue int, figure func(v1, v2 reflect.Va
 		return vSum.Float()
 	}
 	return reflect.New(t1).Interface()
+}
+
+//拆分数组
+func SliceChunk(array interface{}, size int) interface{} {
+	t1 := reflect.TypeOf(array)
+	if t1.Kind() != reflect.Slice {
+		return t1
+	}
+	v1 := reflect.ValueOf(array)
+	chunkSize := int(math.Ceil(float64(v1.Len())/ float64(size)))
+	if 1 == chunkSize {
+		return array
+	}
+	tempSlice := reflect.MakeSlice(reflect.SliceOf(t1), 0, chunkSize)
+	for i := 0; i < chunkSize; i++ {
+		end := (i + 1) * size
+		if end >= v1.Len() {
+			end = v1.Len()
+		}
+		newSlice := reflect.MakeSlice(t1, 0, size)
+		newSlice = reflect.AppendSlice(newSlice.Slice(0, newSlice.Len()), v1.Slice(i*size, end))
+
+		tempSlice = reflect.Append(tempSlice, newSlice)
+	}
+	return tempSlice.Interface()
 }

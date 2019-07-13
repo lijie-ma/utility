@@ -74,15 +74,22 @@ func TestSliceColumn(t *testing.T) {
 }
 
 func TestSliceProduct(t *testing.T) {
-	t1 := []int64 {2,3,4,5}
+	t1 := []int64{2, 3, 4, 5}
 	t.Log(SliceProduct(t1).(int64))
-	t2 := []float32 {2,3,4,5.9}
+	t2 := []float32{2, 3, 4, 5.9}
 	t.Log(SliceProduct(t2).(float64))
 }
 
 func TestSliceSum(t *testing.T) {
-	t1 := []int64 {2,3,4,5}
+	t1 := []int64{2, 3, 4, 5}
 	t.Log(SliceSum(t1).(int64))
-	t2 := []float32 {2,3,4,5.9}
+	t2 := []float32{2, 3, 4, 5.9}
 	t.Log(SliceSum(t2).(float64))
+}
+
+func TestSliceChunk(t *testing.T) {
+	s := []string{"a", "b", "c", "d", "e"}
+	q := SliceChunk(s, 2)
+
+	t.Log(q.([][]string))
 }
