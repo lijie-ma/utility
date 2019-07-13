@@ -3,7 +3,6 @@ package utility
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 )
 
@@ -88,7 +87,7 @@ func FutureDateTimeFromDay(date string, seconds int) (string, error) {
 // seconds 是相隔时间的秒数
 // isFuture 标记是将来的时间，还是过去的时间， 默认过去的时间
 func addTime(times string, timeStyle string, seconds int) (string, error) {
-	t, err := time.ParseInLocation(timeStyle, times, getLocation())
+	t, err := parseTime(times, timeStyle)
 	if nil != err {
 		return "", err
 	}
@@ -98,18 +97,48 @@ func addTime(times string, timeStyle string, seconds int) (string, error) {
 
 //返回时区为 Asia/Chongqing 的unix 时间戳
 func Date2Unix(date string) int64 {
-	style := YYYY_MM_DD_H_I_S
-	switch len(date) {
-	case 8:
-		style = YYYYMMDD
-	case 10:
-		style = YYYY_MM_DD
-	}
-	t, err := time.ParseInLocation(style, date, getLocation())
+	t, err := parseTime(date)
 	if nil != err {
 		return 0
 	}
 	return t.Unix()
+}
+
+//DateCompare 日期比较
+// 相等返回 0， 小于 -1 大于 1
+// -2 代表异常
+func DateCompare(t1, t2 string, style ...string) int {
+	tt1, er := parseTime(t1, style...)
+	if nil != er {
+		return -2
+	}
+	tt2, err := parseTime(t2, style...)
+	if nil != err {
+		return -2
+	}
+	if tt1.Equal(tt2) {
+		return 0
+	}
+
+	if tt1.Before(tt2) {
+		return -1
+	}
+	return 1
+}
+
+func parseTime(t1 string, style ...string) (time.Time, error) {
+	s := YYYY_MM_DD
+	if 0 < len(style) {
+		s = style[0]
+	} else {
+		switch len(t1) {
+		case 8:
+			s = YYYYMMDD
+		case 19:
+			s = YYYY_MM_DD_H_I_S
+		}
+	}
+	return time.ParseInLocation(s, t1, getLocation())
 }
 
 func Unix2Time(unixTime int64, style ...string) string {
@@ -118,14 +147,6 @@ func Unix2Time(unixTime int64, style ...string) string {
 		return t.Format(YYYY_MM_DD_H_I_S)
 	}
 	return t.Format(style[0])
-}
-
-func atoi(arg interface{}) int {
-	num, err := strconv.Atoi(arg.(string))
-	if nil != err {
-		return 0
-	}
-	return num
 }
 
 //MonthLastDay 返回一月的最后一天的
@@ -180,30 +201,4 @@ func computeMonthDays(year int, month int) (days int) {
 		}
 	}
 	return
-}
-
-// 日期比较
-// 相等返回 0， 小于 -1 大于 1
-// -2 代表异常
-func Compare(t1, t2 string, style ...string) int {
-	s := YYYY_MM_DD
-	if 0 < len(style) {
-		s = style[0]
-	}
-	tt1, er := time.Parse(s, t1)
-	if nil != er {
-		return -2
-	}
-	tt2, err := time.Parse(s, t2)
-	if nil != err {
-		return -2
-	}
-	if tt1.Equal(tt2) {
-		return 0
-	}
-
-	if tt1.Before(tt2) {
-		return -1
-	}
-	return 1
 }

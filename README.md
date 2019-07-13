@@ -52,7 +52,7 @@ FutureDateFromDay()
 Date2Unix()
 Unix2Time()
 MonthLastDay()
-Compare()
+DateCompare()
 
 ```
 
