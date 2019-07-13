@@ -55,6 +55,8 @@ func SliceFilter(array interface{}, filter func(value interface{}) bool) interfa
 	return newSlice.Interface()
 }
 
+//SlicePop 将slice最后一个值移出
+//arrayPoint 为slice指针
 func SlicePop(arrayPoint interface{}) {
 	tmpType := reflect.TypeOf(arrayPoint)
 	if tmpType.Kind() != reflect.Ptr {
@@ -68,7 +70,8 @@ func SlicePop(arrayPoint interface{}) {
 	elem.Set(reflect.AppendSlice(elem.Slice(0, elem.Len()-1), elem.Slice(0, 0)))
 }
 
-//将数组开头的单元移出数组
+//SliceShift 将数组开头的单元移出数组
+//arrayPoint 为slice指针
 func SliceShift(arrayPoint interface{}) {
 	tmpType := reflect.TypeOf(arrayPoint)
 	if tmpType.Kind() != reflect.Ptr {
@@ -253,6 +256,8 @@ func SliceChunk(array interface{}, size int) interface{} {
 	return tempSlice.Interface()
 }
 
+//SliceWalk 使用用户自定义函数对数组中的每个元素做回调处理
+//arrayPoint 为slice指针
 func SliceWalk(arrayPoint interface{}, call func(value interface{}, index int) interface{}) bool {
 	t1 := reflect.TypeOf(arrayPoint)
 	if t1.Kind() != reflect.Ptr || t1.Elem().Kind() != reflect.Slice {
