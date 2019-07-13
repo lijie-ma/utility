@@ -1,10 +1,16 @@
 # utility
 go版本的php函数 非大而全，只做常用的和扩展的
 
-## 安装
+doc https://godoc.org/github.com/lijie-ma/utility
+
+## Install
 ```
 go get -u github.com/lijie-ma/utility
 ```
+
+## Requirements
+  Go 1.11 or above
+
 
 ## demo
 
@@ -47,10 +53,7 @@ func main() {
 ### time
 ```cassandraql
 Time()
-Date()
 FutureDateFromDay()
-Date2Unix()
-Unix2Time()
 MonthLastDay()
 DateCompare()
 
@@ -74,28 +77,6 @@ SliceChunk()
 SliceWalk()
 
 MapKeys()
-```
-
-### string Functions
-
-```function
-Substr()
-
-```
-
-### math
-```cassandraql
-DivFloat()
-Round()
-```
-
-### file
-```cassandraql
-FileGetContents()
-FilePutContents()
-IsDir()
-FileExists()
-
 ```
 
 ### other
