@@ -142,7 +142,11 @@ func SliceDiff(a1, a2 interface{}) interface{} {
 	return newSlice.Interface()
 }
 
-//返回数组中指定的一列
+//SliceColumn 返回数组中指定的一列
+// array 格式要求 []map[string]interface{}
+// 返回值 columnKey 对应值类型的slice
+// 比如 map[string]inerface{}{"name":"malijie", age:3}
+// []string{"malijie"} 或者 []int{3}
 func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
 	t1 := reflect.TypeOf(array)
 	if t1.Kind() != reflect.Slice || t1.Elem().Kind() != reflect.Map {
@@ -173,7 +177,7 @@ func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
 	return newSlice.Interface(), nil
 }
 
-//计算数组中所有值的乘积
+//SliceProduct 计算数组中所有值的乘积
 //目前支持 int16，int32， int64， float32，float64
 // 返回值类型 为 int64 或float64
 func SliceProduct(array interface{}) interface{} {
