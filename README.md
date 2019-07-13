@@ -49,7 +49,7 @@ func main() {
 
 
 ```
-
+## 函数摘要
 ### time
 ```cassandraql
 Time()

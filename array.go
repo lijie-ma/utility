@@ -55,6 +55,8 @@ func SliceFilter(array interface{}, filter func(value interface{}) bool) interfa
 	return newSlice.Interface()
 }
 
+//SlicePop 将slice最后一个值移出
+//arrayPoint 为slice指针
 func SlicePop(arrayPoint interface{}) {
 	tmpType := reflect.TypeOf(arrayPoint)
 	if tmpType.Kind() != reflect.Ptr {
@@ -68,7 +70,8 @@ func SlicePop(arrayPoint interface{}) {
 	elem.Set(reflect.AppendSlice(elem.Slice(0, elem.Len()-1), elem.Slice(0, 0)))
 }
 
-//将数组开头的单元移出数组
+//SliceShift 将数组开头的单元移出数组
+//arrayPoint 为slice指针
 func SliceShift(arrayPoint interface{}) {
 	tmpType := reflect.TypeOf(arrayPoint)
 	if tmpType.Kind() != reflect.Ptr {
@@ -139,7 +142,11 @@ func SliceDiff(a1, a2 interface{}) interface{} {
 	return newSlice.Interface()
 }
 
-//返回数组中指定的一列
+//SliceColumn 返回数组中指定的一列
+// array 格式要求 []map[string]interface{}
+// 返回值 columnKey 对应值类型的slice
+// 比如 map[string]inerface{}{"name":"malijie", age:3}
+// []string{"malijie"} 或者 []int{3}
 func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
 	t1 := reflect.TypeOf(array)
 	if t1.Kind() != reflect.Slice || t1.Elem().Kind() != reflect.Map {
@@ -170,7 +177,7 @@ func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
 	return newSlice.Interface(), nil
 }
 
-//计算数组中所有值的乘积
+//SliceProduct 计算数组中所有值的乘积
 //目前支持 int16，int32， int64， float32，float64
 // 返回值类型 为 int64 或float64
 func SliceProduct(array interface{}) interface{} {
@@ -253,6 +260,8 @@ func SliceChunk(array interface{}, size int) interface{} {
 	return tempSlice.Interface()
 }
 
+//SliceWalk 使用用户自定义函数对数组中的每个元素做回调处理
+//arrayPoint 为slice指针
 func SliceWalk(arrayPoint interface{}, call func(value interface{}, index int) interface{}) bool {
 	t1 := reflect.TypeOf(arrayPoint)
 	if t1.Kind() != reflect.Ptr || t1.Elem().Kind() != reflect.Slice {
