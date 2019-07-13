@@ -24,7 +24,7 @@ func main() {
 	fmt.Println(after24Hours, after5Min)
 
 	//日期比较
-	switch utility.Compare(today, after24Hours) {
+	switch utility.DateCompare(today, after24Hours) {
 	case 0:
 		fmt.Println("eq")
 	case -1:
