@@ -1,25 +1,29 @@
+//package utility 旨在提供便捷的函数操作，其中大部分的函数是源自于php函数
 package utility
 
 import (
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 )
 
 const (
+	//日期格式
 	YYYY_MM_DD       = `2006-01-02`
 	YYYYMMDD         = `20060102`
 	YYYY_MM_DD_H_I_S = `2006-01-02 15:04:05`
-	TIME_ZONE        = `Asia/Chongqing`
+
+	//默认时区
+	defalut_time_zone = `Asia/Chongqing`
 )
 
 var timeZone string
 
 func init() {
-	timeZone = TIME_ZONE
+	timeZone = defalut_time_zone
 }
 
+//SetTimeZone 设置时区
 func SetTimeZone(zone string) {
 	timeZone = zone
 }
@@ -46,11 +50,12 @@ func Date(style ...string) string {
 	return LocalTime().Format(defaultStyle)
 }
 
+//LocalTime 返回默认时区的time.Time
 func LocalTime() time.Time {
 	return time.Now().In(getLocation())
 }
 
-// 字符串转换unix 时间戳
+//Str2Time 字符串转换unix 时间戳
 // date  格式 2019-07-01 20190701 2019-07-01 12:12:12
 // 返回 0 代表失败
 func Str2Time(date string) int64 {
@@ -123,15 +128,44 @@ func atoi(arg interface{}) int {
 	return num
 }
 
-//一个月的最后一天
-// month 格式 2017-09
-func MonthLastDay(month string) string {
-	s := strings.Split(month, "-")
-	days := GetDays(atoi(s[0]), atoi(s[1]))
-	return month + fmt.Sprintf("-%d", days)
+//MonthLastDay 返回一月的最后一天的
+// 返回格式 20190731 或者 2019-07-31 （依据date的传入格式）
+func MonthLastDay(date string) string {
+	var year, month int
+	byteSlice := []byte(date)
+	style := `%d%d%d`
+	switch len(date) {
+	case 8:
+		year = Atoi(string(byteSlice[0:4]))
+		month = Atoi(string(byteSlice[4:6]))
+	case 10, 19:
+		year = Atoi(string(byteSlice[0:4]))
+		month = Atoi(string(byteSlice[5:7]))
+		style = `%d-%d-%d`
+	default:
+		panic("date is not a valid time format")
+	}
+	return fmt.Sprintf(style, year, month, computeMonthDays(year, month))
 }
 
-func GetDays(year int, month int) (days int) {
+//MonthOfDays 返回当前月份的天数
+func MonthOfDays(date string) int {
+	var year, month int
+	byteSlice := []byte(date)
+	switch len(date) {
+	case 8:
+		year = Atoi(string(byteSlice[0:4]))
+		month = Atoi(string(byteSlice[4:6]))
+	case 10, 19:
+		year = Atoi(string(byteSlice[0:4]))
+		month = Atoi(string(byteSlice[5:7]))
+	default:
+		panic("date is not a valid time format")
+	}
+	return computeMonthDays(year, month)
+}
+
+func computeMonthDays(year int, month int) (days int) {
 	if month != 2 {
 		if month == 4 || month == 6 || month == 9 || month == 11 {
 			days = 30

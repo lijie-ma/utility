@@ -62,12 +62,13 @@ func Md5(encode string) string {
 	return fmt.Sprintf(`%x`, md5.Sum([]byte(encode)))
 }
 
-// Base64Encode摘自go 源码
+//Base64Encode 摘自go 源码
 func Base64Encode(encode string) string {
 	return base64.StdEncoding.EncodeToString([]byte(encode))
 }
 
-// Base64Decode
+//Base64Decode
+//解码失败返回 空字符串
 func Base64Decode(encode string) string {
 	b, e := base64.StdEncoding.DecodeString(encode)
 	if nil != e {
