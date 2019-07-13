@@ -1,6 +1,9 @@
 package utility
 
-import "testing"
+import (
+	"strconv"
+	"testing"
+)
 
 func filterS(v interface{}) bool {
 	return v.(string) == "b"
@@ -92,4 +95,15 @@ func TestSliceChunk(t *testing.T) {
 	q := SliceChunk(s, 2)
 
 	t.Log(q.([][]string))
+}
+
+
+func TestSliceWalk(t *testing.T) {
+	call := func(value interface{}, index int) interface{} {
+		return value.(string) + "aa\t" + strconv.Itoa(index)
+	}
+	s := []string{"a", "b", "c", "d", "e"}
+	SliceWalk(&s, call)
+
+	t.Log(s)
 }

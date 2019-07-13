@@ -235,7 +235,7 @@ func SliceChunk(array interface{}, size int) interface{} {
 		return t1
 	}
 	v1 := reflect.ValueOf(array)
-	chunkSize := int(math.Ceil(float64(v1.Len())/ float64(size)))
+	chunkSize := int(math.Ceil(float64(v1.Len()) / float64(size)))
 	if 1 == chunkSize {
 		return array
 	}
@@ -251,4 +251,17 @@ func SliceChunk(array interface{}, size int) interface{} {
 		tempSlice = reflect.Append(tempSlice, newSlice)
 	}
 	return tempSlice.Interface()
+}
+
+func SliceWalk(arrayPoint interface{}, call func(value interface{}, index int) interface{}) bool {
+	t1 := reflect.TypeOf(arrayPoint)
+	if t1.Kind() != reflect.Ptr || t1.Elem().Kind() != reflect.Slice {
+		return false
+	}
+	v1 := reflect.ValueOf(arrayPoint).Elem()
+	for i := 0; i < v1.Len(); i++ {
+		v1.Index(i).Set(reflect.ValueOf(call(v1.Index(i).Interface(), i)))
+	}
+	return true
+
 }

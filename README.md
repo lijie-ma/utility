@@ -71,6 +71,7 @@ SliceColumn()
 SliceSum()
 SliceProduct()
 SliceChunk()
+SliceWalk()
 
 MapKeys()
 ```
