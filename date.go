@@ -13,13 +13,13 @@ const (
 	YYYY_MM_DD_H_I_S = `2006-01-02 15:04:05`
 
 	//默认时区
-	defalut_time_zone = `Asia/Chongqing`
+	DefalutTimeZone = `Asia/Chongqing`
 )
 
 var timeZone string
 
 func init() {
-	timeZone = defalut_time_zone
+	timeZone = DefalutTimeZone
 }
 
 //SetTimeZone 设置时区
