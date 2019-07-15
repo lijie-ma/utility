@@ -76,6 +76,13 @@ func TestSliceColumn(t *testing.T) {
 	t.Log(SliceColumn(s2, "b"))
 }
 
+func TestSliceUnique(t *testing.T) {
+	s := []int{2, 3, 2, 4, 3, 5}
+	u := SliceUnique(s)
+
+	t.Log(u.([]int))
+}
+
 func TestSliceProduct(t *testing.T) {
 	t1 := []int64{2, 3, 4, 5}
 	t.Log(SliceProduct(t1).(int64))
@@ -96,7 +103,6 @@ func TestSliceChunk(t *testing.T) {
 
 	t.Log(q.([][]string))
 }
-
 
 func TestSliceWalk(t *testing.T) {
 	call := func(value interface{}, index int) interface{} {

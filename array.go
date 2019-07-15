@@ -26,16 +26,28 @@ func InSlice(val interface{}, array interface{}) (exists bool, index int) {
 	return
 }
 
-func SliceUnique(s []string) []string {
-	ret := s[:0]
-	assist := map[string]struct{}{}
-	for _, v := range s {
-		if _, ok := assist[v]; !ok {
-			assist[v] = struct{}{}
-			ret = append(ret, v)
+//SliceUnique 移除数组中重复的值
+// 如果传入的不是数组，则会原样返回
+func SliceUnique(array interface{}) interface{} {
+	t1 := reflect.TypeOf(array)
+	if t1.Kind() != reflect.Slice {
+		return array
+	}
+
+	tmp := struct{}{}
+	tmpV := reflect.ValueOf(tmp)
+	v1 := reflect.ValueOf(array)
+	newSlice := reflect.MakeSlice(reflect.SliceOf(t1.Elem()), 0, v1.Len())
+	tmpMap := reflect.MakeMap(reflect.MapOf(t1.Elem(), reflect.TypeOf(tmp)))
+	for i := 0; i < v1.Len(); i++ {
+		e := tmpMap.MapIndex(v1.Index(i))
+		if !e.IsValid() {
+			newSlice = reflect.Append(newSlice, v1.Index(i))
+			tmpMap.SetMapIndex(v1.Index(i), tmpV)
 		}
 	}
-	return ret
+	return newSlice.Interface()
+
 }
 
 //数组过滤，如果传递的不是数组，则返回原输入
@@ -114,6 +126,7 @@ func SliceIntersect(a1, a2 interface{}) interface{} {
 	return newSlice.Interface()
 }
 
+//SliceDiff 计算数组的差集
 func SliceDiff(a1, a2 interface{}) interface{} {
 	t1 := reflect.TypeOf(a1)
 	if t1.Kind() != reflect.Slice {
