@@ -3,6 +3,7 @@ package utility
 import (
 	"fmt"
 	"net/url"
+	"reflect"
 )
 
 func Substr(s string, start int, length ...int) string {
@@ -39,8 +40,16 @@ func HttpBuildQuery(params map[string]interface{}) string {
 		switch v.(type) {
 		case float32:
 			urlValue.Add(k, fmt.Sprintf("%f", v.(float32)))
+		case []float32:
+			for _, sv := range v.([]float32) {
+				urlValue.Add(k+`[]`, fmt.Sprintf("%f", sv))
+			}
 		case float64:
 			urlValue.Add(k, fmt.Sprintf("%f", v.(float64)))
+		case []float64:
+			for _, sv := range v.([]float64) {
+				urlValue.Add(k+`[]`, fmt.Sprintf("%f", sv))
+			}
 		case int:
 			urlValue.Add(k, fmt.Sprintf("%d", v.(int)))
 		case []int:
@@ -60,7 +69,7 @@ func HttpBuildQuery(params map[string]interface{}) string {
 				urlValue.Add(k+`[]`, sv)
 			}
 		default:
-			panic("invalid type")
+			panic( k + " invalid type " + reflect.TypeOf(v).Kind().String())
 		}
 	}
 	return urlValue.Encode()
