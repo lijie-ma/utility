@@ -76,3 +76,69 @@ func Base64Decode(encode string) string {
 	}
 	return string(b)
 }
+
+// 十进制转换为二进制
+func DecBin(i int64) string {
+	return fmt.Sprintf(`%b`, i)
+}
+
+// 二进制转换为十进制
+func BinDec(s string) int64 {
+	i := int64(0)
+	length := len(s)
+	for j := 0; j < length; j++ {
+		if `1` == s[j:j+1] {
+			i += 1 << uint(length-j-1)
+		}
+	}
+	return i
+}
+
+func DecHex(i int64) string {
+	return fmt.Sprintf(`%x`, i)
+}
+
+func HexDec(s string) int64 {
+	i := int64(0)
+	length := len(s)
+	if 0 == length {
+		return i
+	}
+	mm := map[string]int64{
+		`0`: 0,
+		`1`: 1,
+		`2`: 2,
+		`3`: 3,
+		`4`: 4,
+		`5`: 5,
+		`6`: 6,
+		`7`: 7,
+		`8`: 8,
+		`9`: 9,
+		`a`: 10,
+		`b`: 11,
+		`c`: 12,
+		`d`: 13,
+		`e`: 14,
+		`f`: 15,
+		`A`: 10,
+		`B`: 11,
+		`C`: 12,
+		`D`: 13,
+		`E`: 14,
+		`F`: 15,
+	}
+	filter := ``
+	for j := 0; j < length; j++ {
+		if _, ok := mm[s[j:j+1]]; ok {
+			filter += s[j : j+1]
+		}
+	}
+	length = len(filter)
+	for j := 0; j < length; j++ {
+		if `0` != filter[j:j+1] {
+			i += mm[filter[j:j+1]] * 1 << uint((length-j-1)*4)
+		}
+	}
+	return i
+}
