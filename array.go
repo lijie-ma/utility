@@ -287,3 +287,19 @@ func SliceWalk(arrayPoint interface{}, call func(value interface{}, index int) i
 	return true
 
 }
+
+//SliceReverse 返回一个单元顺序相反的数组
+//arrayPoint 为slice指针
+func SliceReverse(arrayPoint interface{}) error {
+	t1 := reflect.TypeOf(arrayPoint)
+	if t1.Kind() != reflect.Ptr || t1.Elem().Kind() != reflect.Slice {
+		return errors.New("Parameter requires slice pointer")
+	}
+	v1 := reflect.ValueOf(arrayPoint).Elem()
+	for i, j := 0, v1.Len()-1; i < j; i, j = i+1, j-1 {
+		tmp1, tmp2 := v1.Index(i).Interface(), v1.Index(j).Interface()
+		v1.Index(i).Set(reflect.ValueOf(tmp2))
+		v1.Index(j).Set(reflect.ValueOf(tmp1))
+	}
+	return nil
+}

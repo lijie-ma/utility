@@ -113,3 +113,9 @@ func TestSliceWalk(t *testing.T) {
 
 	t.Log(s)
 }
+
+func TestSliceReverse(t *testing.T) {
+	c := []int{2,3,4,5,6,7}
+	SliceReverse(&c)
+	t.Log(c)
+}
