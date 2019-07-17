@@ -5,16 +5,21 @@ import (
 	"reflect"
 )
 
+var (
+	errIsNotMap = errors.New(`Parameter requires map`)
+	errEmptyMap   = errors.New(`map is empty`)
+)
+
 //MapKeys 返回map中的keys
 func MapKeys(maps interface{}, filter ...func(key interface{}) bool) (interface{}, error) {
 	tmap := reflect.TypeOf(maps)
 	if tmap.Kind() != reflect.Map {
-		return nil, errors.New("maps is not a map")
+		return nil, errIsNotMap
 	}
 	vMap := reflect.ValueOf(maps)
 	keys := vMap.MapKeys()
 	if 0 == len(keys) {
-		return nil, errors.New("maps's lenght is zero")
+		return nil, errEmptyMap
 	}
 	newSlice := reflect.MakeSlice(reflect.SliceOf(keys[0].Type()), 0, len(keys))
 	if 0 < len(filter) {

@@ -39,16 +39,16 @@ func TestSliceShift(t *testing.T) {
 func TestSliceIntersect(t *testing.T) {
 	s1 := []string{"a", "b", "c", "d", "e"}
 	s2 := []string{"f", "b", "c", "d", "e"}
-	ti := SliceIntersect(s1, s2)
-	t.Log(ti.([]string))
+	ti, e := SliceIntersect(s1, s2)
+	t.Log(ti.([]string), e)
 	t.Log(ti)
 }
 
 func TestSliceDiff(t *testing.T) {
 	s1 := []string{"a", "b", "c", "d", "e"}
 	s2 := []string{"f", "b", "c", "d", "e"}
-	ti := SliceDiff(s1, s2)
-	t.Log(ti.([]string))
+	ti,e := SliceDiff(s1, s2)
+	t.Log(ti.([]string), e)
 	t.Log(ti)
 }
 
@@ -117,7 +117,7 @@ func TestSliceWalk(t *testing.T) {
 }
 
 func TestSliceReverse(t *testing.T) {
-	c := []int{2,3,4,5,6,7}
+	c := []int{2, 3, 4, 5, 6, 7}
 	SliceReverse(&c)
 	t.Log(c)
 }

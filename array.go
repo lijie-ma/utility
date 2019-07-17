@@ -111,20 +111,20 @@ func SliceShift(arrayPoint interface{}, preserveCap ...bool) (interface{}, error
 }
 
 // SliceIntersect 数组交集
-func SliceIntersect(a1, a2 interface{}) interface{} {
+func SliceIntersect(a1, a2 interface{}) (interface{}, error) {
 	t1 := reflect.TypeOf(a1)
 	if t1.Kind() != reflect.Slice {
-		panic("a1 is not a slice")
+		return nil, errIsNotSlice
 	}
 	t2 := reflect.TypeOf(a2)
 	if t2.Kind() != reflect.Slice {
-		panic("a2 is not a slice")
+		return nil, errIsNotSlice
 	}
 
 	v1 := reflect.ValueOf(a1)
 	v2 := reflect.ValueOf(a2)
 	if v1.Type().String() != v2.Type().String() {
-		panic("a1 and a2 must be the same type of slice")
+		return nil, errors.New(`Parameters must be the same type of slice`)
 	}
 	tmp := make(map[interface{}]interface{})
 	for i := 0; i < v1.Len(); i++ {
@@ -136,24 +136,24 @@ func SliceIntersect(a1, a2 interface{}) interface{} {
 			newSlice = reflect.Append(newSlice, v2.Index(i))
 		}
 	}
-	return newSlice.Interface()
+	return newSlice.Interface(), nil
 }
 
 //SliceDiff 计算数组的差集
-func SliceDiff(a1, a2 interface{}) interface{} {
+func SliceDiff(a1, a2 interface{}) (interface{}, error) {
 	t1 := reflect.TypeOf(a1)
 	if t1.Kind() != reflect.Slice {
-		panic("a1 is not a slice")
+		return nil, errIsNotSlice
 	}
 	t2 := reflect.TypeOf(a2)
 	if t2.Kind() != reflect.Slice {
-		panic("a2 is not a slice")
+		return nil, errIsNotSlice
 	}
 
 	v1 := reflect.ValueOf(a1)
 	v2 := reflect.ValueOf(a2)
 	if v1.Type().String() != v2.Type().String() {
-		panic("a1 and a2 must be the same type of slice")
+		return nil, errors.New(`Parameters must be the same type of slice`)
 	}
 	tmp := make(map[interface{}]interface{})
 	for i := 0; i < v2.Len(); i++ {
@@ -165,7 +165,7 @@ func SliceDiff(a1, a2 interface{}) interface{} {
 			newSlice = reflect.Append(newSlice, v1.Index(i))
 		}
 	}
-	return newSlice.Interface()
+	return newSlice.Interface(), nil
 }
 
 //SliceColumn 返回数组中指定的一列
@@ -288,16 +288,16 @@ func SliceChunk(array interface{}, size int) interface{} {
 
 //SliceWalk 使用用户自定义函数对数组中的每个元素做回调处理
 //arrayPoint 为slice指针
-func SliceWalk(arrayPoint interface{}, call func(value interface{}, index int) interface{}) bool {
+func SliceWalk(arrayPoint interface{}, call func(value interface{}, index int) interface{}) error {
 	t1 := reflect.TypeOf(arrayPoint)
 	if t1.Kind() != reflect.Ptr || t1.Elem().Kind() != reflect.Slice {
-		return false
+		return errSlicePointer
 	}
 	v1 := reflect.ValueOf(arrayPoint).Elem()
 	for i := 0; i < v1.Len(); i++ {
 		v1.Index(i).Set(reflect.ValueOf(call(v1.Index(i).Interface(), i)))
 	}
-	return true
+	return nil
 
 }
 
