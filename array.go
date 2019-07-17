@@ -6,6 +6,12 @@ import (
 	"reflect"
 )
 
+var (
+	errSlicePointer = errors.New(`Parameter requires slice pointer`)
+	errIsNotSlice   = errors.New(`Parameter requires slice`)
+	errEmptySlice   = errors.New(`slice is empty`)
+)
+
 //判断 val 是否在 array 里
 // 返回 exists（bool）  index（int）
 func InSlice(val interface{}, array interface{}) (exists bool, index int) {
@@ -69,32 +75,39 @@ func SliceFilter(array interface{}, filter func(value interface{}) bool) interfa
 
 //SlicePop 将slice最后一个值移出
 //arrayPoint 为slice指针
-func SlicePop(arrayPoint interface{}) {
+func SlicePop(arrayPoint interface{}) (interface{}, error) {
 	tmpType := reflect.TypeOf(arrayPoint)
-	if tmpType.Kind() != reflect.Ptr {
-		panic("需要传递数组指针")
+	if tmpType.Kind() != reflect.Ptr || tmpType.Elem().Kind() != reflect.Slice {
+		return nil, errSlicePointer
 	}
-	v := reflect.ValueOf(arrayPoint)
-	elem := v.Elem()
-	if elem.Kind() != reflect.Slice {
-		panic("需要传递数组指针")
+	elem := reflect.ValueOf(arrayPoint).Elem()
+	if 0 == elem.Len() {
+		return nil, errEmptySlice
 	}
+	popV := elem.Index(elem.Len() - 1).Interface()
 	elem.Set(reflect.AppendSlice(elem.Slice(0, elem.Len()-1), elem.Slice(0, 0)))
+	return popV, nil
 }
 
 //SliceShift 将数组开头的单元移出数组
 //arrayPoint 为slice指针
-func SliceShift(arrayPoint interface{}) {
+//preserveCap 是否保持原slice的cap
+func SliceShift(arrayPoint interface{}, preserveCap ...bool) (interface{}, error) {
 	tmpType := reflect.TypeOf(arrayPoint)
-	if tmpType.Kind() != reflect.Ptr {
-		panic("需要传递数组指针")
+	if tmpType.Kind() != reflect.Ptr || tmpType.Elem().Kind() != reflect.Slice {
+		return nil, errSlicePointer
 	}
-	v := reflect.ValueOf(arrayPoint)
-	elem := v.Elem()
-	if elem.Kind() != reflect.Slice {
-		panic("需要传递数组指针")
+	elem := reflect.ValueOf(arrayPoint).Elem()
+	if 0 == elem.Len() {
+		return nil, errEmptySlice
 	}
-	elem.Set(reflect.AppendSlice(elem.Slice(1, elem.Len()), elem.Slice(1, 1)))
+	shiftV := elem.Index(0).Interface()
+	if 0 < len(preserveCap) && preserveCap[0] {
+		elem.Set(reflect.AppendSlice(elem.Slice(0, 0), elem.Slice(1, elem.Len())))
+	} else {
+		elem.Set(reflect.AppendSlice(elem.Slice(1, elem.Len()), elem.Slice(1, 1)))
+	}
+	return shiftV, nil
 }
 
 // SliceIntersect 数组交集

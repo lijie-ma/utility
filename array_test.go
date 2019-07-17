@@ -24,13 +24,15 @@ func TestSliceFilter(t *testing.T) {
 
 func TestSlicePop(t *testing.T) {
 	s := []string{"a", "b", "c", "d", "e"}
-	SlicePop(&s)
-	t.Log(s)
+	v, e := SlicePop(&s)
+	t.Log(v, e, s, len(s), cap(s))
 }
 
 func TestSliceShift(t *testing.T) {
 	s := []string{"a", "b", "c", "d", "e"}
 	SliceShift(&s)
+	t.Log(s, len(s), cap(s))
+	SliceShift(&s, true)
 	t.Log(s, len(s), cap(s))
 }
 
