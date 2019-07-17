@@ -69,8 +69,28 @@ func HttpBuildQuery(params map[string]interface{}) string {
 				urlValue.Add(k+`[]`, sv)
 			}
 		default:
-			panic( k + " invalid type " + reflect.TypeOf(v).Kind().String())
+			panic(k + " invalid type " + reflect.TypeOf(v).Kind().String())
 		}
 	}
 	return urlValue.Encode()
+}
+
+func Ucfirst(s string) string {
+	for _, v := range s {
+		if 'a' <= v && 'z' >= v {
+			return string(v-32) + s[1:]
+		}
+		return s
+	}
+	return s
+}
+
+func Lcfirst(s string) string {
+	for _, v := range s {
+		if 'A' <= v && 'Z' >= v {
+			return string(v+32) + s[1:]
+		}
+		return s
+	}
+	return s
 }
