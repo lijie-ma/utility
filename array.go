@@ -176,7 +176,7 @@ func SliceDiff(a1, a2 interface{}) interface{} {
 func SliceColumn(array interface{}, columnKey string) (interface{}, error) {
 	t1 := reflect.TypeOf(array)
 	if t1.Kind() != reflect.Slice || t1.Elem().Kind() != reflect.Map {
-		return nil, errors.New("array is not a slice")
+		return nil, errIsNotSlice
 	}
 	vArray := reflect.ValueOf(array)
 	vMap := vArray.Index(0)
@@ -306,7 +306,7 @@ func SliceWalk(arrayPoint interface{}, call func(value interface{}, index int) i
 func SliceReverse(arrayPoint interface{}) error {
 	t1 := reflect.TypeOf(arrayPoint)
 	if t1.Kind() != reflect.Ptr || t1.Elem().Kind() != reflect.Slice {
-		return errors.New("Parameter requires slice pointer")
+		return errSlicePointer
 	}
 	v1 := reflect.ValueOf(arrayPoint).Elem()
 	for i, j := 0, v1.Len()-1; i < j; i, j = i+1, j-1 {
