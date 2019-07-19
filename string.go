@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"reflect"
+	"strconv"
 )
 
 func Substr(s string, start int, length ...int) string {
@@ -51,16 +52,16 @@ func HttpBuildQuery(params map[string]interface{}) string {
 				urlValue.Add(k+`[]`, fmt.Sprintf("%f", sv))
 			}
 		case int:
-			urlValue.Add(k, fmt.Sprintf("%d", v.(int)))
+			urlValue.Add(k, strconv.Itoa(v.(int)))
 		case []int:
 			for _, sv := range v.([]int) {
-				urlValue.Add(k+`[]`, fmt.Sprintf("%d", sv))
+				urlValue.Add(k+`[]`, strconv.Itoa(sv))
 			}
 		case int64:
-			urlValue.Add(k, fmt.Sprintf("%d", v.(int64)))
+			urlValue.Add(k, strconv.FormatInt(v.(int64), 10))
 		case []int64:
 			for _, sv := range v.([]int64) {
-				urlValue.Add(k+`[]`, fmt.Sprintf("%d", sv))
+				urlValue.Add(k+`[]`, strconv.FormatInt(sv, 10))
 			}
 		case string:
 			urlValue.Add(k, v.(string))
