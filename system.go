@@ -1,6 +1,7 @@
 package utility
 
 import (
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -18,4 +19,12 @@ func Exec(command string, bashEnv ...string) ([]string, error) {
 		return []string{}, err
 	}
 	return strings.Split(strings.Trim(string(out),"\n"), "\n"), nil
+}
+
+func Getenv(varname string) string {
+	return os.Getenv(varname)
+}
+
+func Getcwd() (dir string, err error) {
+	return os.Getwd();
 }
