@@ -4,6 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/base64"
 	"fmt"
+	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -141,4 +143,19 @@ func HexDec(s string) int64 {
 		}
 	}
 	return i
+}
+
+func IsNumeric(i interface{}) bool {
+	t := reflect.TypeOf(i)
+	if int(t.Kind()) > int(reflect.Bool) && int(t.Kind()) < int(reflect.Float64) {
+		return true
+	}
+	if t.Kind() != reflect.String {
+		return false
+	}
+	b, err := regexp.Match(`^(\d+|\d+[\.]\d+)$`, []byte(i.(string)))
+	if nil != err {
+		return false;
+	}
+	return b
 }
