@@ -40,6 +40,11 @@ func Atoi(arg interface{}) int {
 	return num
 }
 
+// IntVal alias of AtoInt64
+func IntVal(arg interface{}) int64 {
+	return AtoInt64(arg)
+}
+
 func AtoFloat64(arg interface{}) float64 {
 	num, err := strconv.ParseFloat(arg.(string), 32)
 	if nil != err {
