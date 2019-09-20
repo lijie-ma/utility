@@ -5,7 +5,7 @@ import (
 )
 
 func TestDate(t *testing.T) {
-	d := Date()
+	d := Date(YYYY_MM_DD)
 	t.Log(d)
 	t.Log(Date(YYYY_MM_DD_H_I_S))
 }
@@ -17,8 +17,8 @@ func TestDate2Unix(t *testing.T) {
 }
 
 func TestFutureDateFromDay(t *testing.T) {
-	t.Log(FutureDateFromDay(Date(), 24))
-	t.Log(FutureDateFromDay(Date(), -24))
+	t.Log(FutureDateFromDay(Date(YYYY_MM_DD), 24))
+	t.Log(FutureDateFromDay(Date(YYYY_MM_DD), -24))
 }
 
 func TestCompare(t *testing.T) {

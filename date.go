@@ -40,13 +40,11 @@ func Time() int64 {
 	return LocalTime().Unix()
 }
 
-//当前时间
-func Date(style ...string) string {
-	defaultStyle := YYYY_MM_DD
-	if 0 < len(style) {
-		defaultStyle = style[0]
+func Date(style string, timestamp ...int64) string {
+	if 0 == len(timestamp) {
+		return LocalTime().Format(style)
 	}
-	return LocalTime().Format(defaultStyle)
+	return Unix2Time(timestamp[0], style)
 }
 
 //LocalTime 返回默认时区的time.Time
