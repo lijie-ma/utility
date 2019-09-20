@@ -3,6 +3,7 @@ package utility
 import (
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 )
 
@@ -18,7 +19,7 @@ func Exec(command string, bashEnv ...string) ([]string, error) {
 	if err != nil {
 		return []string{}, err
 	}
-	return strings.Split(strings.Trim(string(out),"\n"), "\n"), nil
+	return strings.Split(strings.Trim(string(out), "\n"), "\n"), nil
 }
 
 func Getenv(varname string) string {
@@ -26,5 +27,18 @@ func Getenv(varname string) string {
 }
 
 func Getcwd() (dir string, err error) {
-	return os.Getwd();
+	return os.Getwd()
+}
+
+//返回当前的函数名,如果对次函数封装，则适当设置skip的值为2默认是1
+func FuncName(skip ...int) string {
+	sk := 1
+	if 0 < len(skip) && skip[0] > 0 {
+		sk = skip[0]
+	}
+	pc, _, _, b := runtime.Caller(sk)
+	if !b {
+		return ""
+	}
+	return runtime.FuncForPC(pc).Name()
 }
