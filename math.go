@@ -20,8 +20,9 @@ func DivFloat(f1, f2 float64, point ...int) float64 {
 	return Round(f, p)
 }
 
-func Round(f float64, n int) float64 {
-	pow10_n := math.Pow10(n)
+// 浮点数四舍五入处理
+func Round(f float64, decimals int) float64 {
+	pow10_n := math.Pow10(decimals)
 	return math.Trunc((f+0.5/pow10_n)*pow10_n) / pow10_n
 }
 

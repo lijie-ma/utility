@@ -176,7 +176,7 @@ func IsNumeric(i interface{}) bool {
 	}
 	b, err := regexp.Match(`^-?\d+\.?\d*$`, []byte(i.(string)))
 	if nil != err {
-		return false;
+		return false
 	}
 	return b
 }

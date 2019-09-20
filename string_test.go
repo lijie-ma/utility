@@ -23,3 +23,8 @@ func TestHttpBuildQuery(t *testing.T) {
 
 	t.Log(HttpBuildQuery(s))
 }
+
+func TestNumberFormat(t *testing.T) {
+	v := 3.1415926535
+	t.Log(NumberFormat(v, 1))
+}

@@ -95,3 +95,9 @@ func Lcfirst(s string) string {
 	}
 	return s
 }
+
+//浮点数格式化
+//decimals 保留小数位数
+func NumberFormat(f float64, decimals int) string {
+	return strconv.FormatFloat(f, 'g', decimals+1, 64)
+}
