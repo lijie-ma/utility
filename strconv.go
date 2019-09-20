@@ -56,7 +56,7 @@ func FloatVal(arg interface{}) float64 {
 	return AtoFloat64(arg)
 }
 
-func FloattoStr(f float64, precision int) string {
+func Float2Str(f float64, precision int) string {
 	return NumberFormat(f, precision)
 }
 
