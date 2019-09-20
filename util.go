@@ -45,6 +45,22 @@ func IntVal(arg interface{}) int64 {
 	return AtoInt64(arg)
 }
 
+// 接收基本类型，并转变为字符串
+func StrVal(arg interface{}) string {
+	refType := reflect.TypeOf(arg)
+	typeValue := refType.Kind()
+	switch typeValue {
+	case reflect.String:
+		return arg.(string)
+	case reflect.Float64, reflect.Float32:
+		return fmt.Sprintf("%f", arg)
+	}
+	if typeValue >= reflect.Int && typeValue < reflect.Uint64 {
+		return fmt.Sprintf("%d", arg)
+	}
+	return ""
+}
+
 func AtoFloat64(arg interface{}) float64 {
 	num, err := strconv.ParseFloat(arg.(string), 32)
 	if nil != err {
