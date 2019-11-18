@@ -32,13 +32,25 @@ func Getcwd() (dir string, err error) {
 
 //返回当前的函数名,如果对次函数封装，则适当设置skip的值为2默认是1
 func FuncName(skip ...int) string {
+	s := DebugBacktrace(skip...)
+	if 0 < len(s) {
+		return s[0].(string)
+	}
+	return ``
+}
+
+func DebugBacktrace(skip ...int) []interface{} {
 	sk := 1
 	if 0 < len(skip) && skip[0] > 0 {
 		sk = skip[0]
 	}
-	pc, _, _, b := runtime.Caller(sk)
+	pc, file, line, b := runtime.Caller(sk)
 	if !b {
-		return ""
+		return []interface{}{}
 	}
-	return runtime.FuncForPC(pc).Name()
+	return []interface{}{
+		runtime.FuncForPC(pc).Name(),
+		file,
+		line,
+	}
 }
